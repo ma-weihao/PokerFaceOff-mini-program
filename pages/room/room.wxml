@@ -1,0 +1,50 @@
+<view class="container">
+  <!-- Room Info -->
+  <view class="room-info">
+    <view class="room-name">{{room.room_name}}</view>
+    <view class="round-name">{{room.current_round_name}}</view>
+    <button class="share-button" open-type="share">分享房间</button>
+  </view>
+
+  <!-- Users List -->
+  <view class="users-list">
+    <view class="user-item" wx:for="{{users}}" wx:key="user_id">
+      <image class="user-avatar" src="{{item.avatar_url}}" mode="aspectFill"></image>
+      <view class="user-info">
+        <text class="user-name">{{item.user_name}}</text>
+        <text class="user-role">{{item.role === 1 ? '主持人' : (item.role === 0 ? '投票者' : '观察者')}}</text>
+      </view>
+      <view class="user-vote">
+        <block wx:if="{{room.current_round_status === 1}}">
+          <text wx:if="{{item.vote === -1}}">未投票</text>
+          <text wx:elif="{{item.vote === -2}}">跳过</text>
+          <text wx:else>{{item.vote}}</text>
+        </block>
+        <text wx:else>{{item.vote === -2 ? '跳过' : (item.vote === -1 ? '未投票' : '已投票')}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- Poker Cards -->
+  <view class="poker-cards" wx:if="{{room.current_round_status === 0}}">
+    <view 
+      class="card {{selectedCard === item ? 'selected' : ''}}" 
+      wx:for="{{pokerCards}}" 
+      wx:key="*this"
+      data-value="{{item}}"
+      bindtap="vote"
+    >
+      {{item === -2 ? '跳过' : item}}
+    </view>
+  </view>
+
+  <!-- Host Controls -->
+  <view class="host-controls" wx:if="{{isHost}}">
+    <block wx:if="{{room.current_round_status === 0}}">
+      <button class="primary-button" bindtap="revealVotes">显示投票结果</button>
+    </block>
+    <block wx:else>
+      <button class="primary-button" bindtap="createNewRound">新回合</button>
+    </block>
+  </view>
+</view> 

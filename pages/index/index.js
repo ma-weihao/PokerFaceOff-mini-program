@@ -25,19 +25,39 @@ Page({
   onChooseAvatar(e) {
     const { avatarUrl } = e.detail
     const { nickName } = this.data.userInfo
+    const hasUserInfo = nickName && avatarUrl && avatarUrl !== defaultAvatarUrl
+
     this.setData({
       "userInfo.avatarUrl": avatarUrl,
-      hasUserInfo: nickName && avatarUrl && avatarUrl !== defaultAvatarUrl,
+      hasUserInfo
     })
+
+    if (hasUserInfo) {
+      // Store in globalData when we have complete user info
+      app.globalData.userInfo = {
+        nickName,
+        avatarUrl
+      }
+    }
   },
 
   onInputChange(e) {
     const nickName = e.detail.value
     const { avatarUrl } = this.data.userInfo
+    const hasUserInfo = nickName && avatarUrl && avatarUrl !== defaultAvatarUrl
+
     this.setData({
       "userInfo.nickName": nickName,
-      hasUserInfo: nickName && avatarUrl && avatarUrl !== defaultAvatarUrl,
+      hasUserInfo
     })
+
+    if (hasUserInfo) {
+      // Store in globalData when we have complete user info
+      app.globalData.userInfo = {
+        nickName,
+        avatarUrl
+      }
+    }
   },
 
   createRoom() {
